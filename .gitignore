@@ -1,0 +1,69 @@
+# Streamlit
+.streamlit/secrets.toml
+
+# SQLite & ChromaDB
+*.db
+*.sqlite3
+*.bin
+checkpoints.db*
+data/
+
+# LangGraph
+.langgraph_api/
+
+# VSCode / IDE
+.vscode/
+*.code-workspace
+.idea/
+.DS_Store
+
+# Cursor
+.cursorindexingignore
+.specstory/
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+
+# Build artifacts
+build/
+dist/
+.eggs/
+*.egg-info/
+*.egg
+wheels/
+share/python-wheels/
+MANIFEST
+
+# Logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter
+.ipynb_checkpoints
+
+# Static analysis
+.mypy_cache/
+.dmypy.json
+.pytype/
+.pyre/
+
+# Cython
+cython_debug/
+
+# Rough/Temp Files
+*.txt
+TODO
+*.excalidraw
+*.mp4
