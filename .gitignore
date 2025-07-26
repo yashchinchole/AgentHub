@@ -28,6 +28,7 @@ __pycache__/
 
 # Virtual environments
 .env
+.env.mcp
 .venv/
 env/
 venv/
@@ -68,3 +69,4 @@ TODO
 *.excalidraw
 *.mp4
 AgentHub+.gif
+mcp
