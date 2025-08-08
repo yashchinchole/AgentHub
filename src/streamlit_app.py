@@ -10,7 +10,7 @@ from client import AgentClient, AgentClientError
 from schema import ChatHistory, ChatMessage
 
 APP_TITLE = "AgentHub"
-APP_ICON = "🤖"
+APP_ICON = "〔◉^◉〕"
 USER_ID_COOKIE = "user_id"
 
 SAMPLE_QUESTIONS = {
@@ -24,8 +24,10 @@ SAMPLE_QUESTIONS = {
     ],
     "sql": [
         "What are the table names in the Chinook database?",
-        "What are the column names in the Album table?",
-        # "Show me the top 5 customers by total purchase.",
+        "Show me the top 5 customers by total purchase.",
+        "List all customers who have placed an order in the past 30 days.",
+        "Identify the artist(s) who have released the most albums, along with their names.",
+        "Determine the most popular genre(s) in terms of the number of albums and tracks available, and the total sales amount.",
     ],
     "research-assistant": [
         "Provide links to tutorials or documentation for learning Python.",
@@ -112,12 +114,24 @@ async def main() -> None:
     }
             
     .stExpander button {
-        font-size: 12px !important;
-        padding: 6px 8px !important;
+        font-size: 10px !important;
+        padding: 4px 6px !important;
     }
 
     .stExpander {
-        font-size: 12px !important;
+        font-size: 10px !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .stExpander > div {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .stExpander [data-testid="stExpanderContent"] {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
     </style>
@@ -364,6 +378,19 @@ async def draw_messages(
                             status.write("Output:")
                             status.write(tool_result.content)
                             status.update(state="complete")
+
+            case "tool":
+                # Handle tool messages that might come as top-level messages
+                if is_new:
+                    st.session_state.messages.append(msg)
+
+                status = st.status(
+                    f"Tool Output",
+                    state="complete",
+                )
+                status.write("Output:")
+                status.write(msg.content)
+                status.update(state="complete")
 
             case _:
                 st.error(f"Unexpected ChatMessage type: {msg.type}")

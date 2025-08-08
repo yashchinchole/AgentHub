@@ -18,11 +18,6 @@ from core import get_model, settings
 
 
 class AgentState(MessagesState, total=False):
-    """`total=False` is PEP589 specs.
-
-    documentation: https://typing.readthedocs.io/en/latest/spec/typeddict.html#totality
-    """
-
     safety: LlamaGuardOutput
     remaining_steps: RemainingSteps
 
