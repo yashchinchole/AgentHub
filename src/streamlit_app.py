@@ -143,7 +143,7 @@ async def main() -> None:
 
     </style>
     """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
     if st.get_option("client.toolbarMode") != "minimal":
@@ -155,10 +155,8 @@ async def main() -> None:
     user_id = _get_or_create_user_id()
     if "agent_client" not in st.session_state:
         load_dotenv()
-        base = (
-            os.getenv("AGENT_URL")
-            or f"http://{os.getenv('HOST', '0.0.0.0')}:{os.getenv('PORT', 8000)}"
-        )
+        base = os.getenv(
+            "AGENT_URL") or f"http://{os.getenv('HOST', '0.0.0.0')}:{os.getenv('PORT', 8000)}"
         with st.spinner("Connecting…"):
             st.session_state.agent_client = AgentClient(base_url=base)
     agent_client: AgentClient = st.session_state.agent_client
@@ -166,7 +164,8 @@ async def main() -> None:
     if "thread_id" not in st.session_state:
         tid = st.query_params.get("thread_id") or str(uuid.uuid4())
         try:
-            hist: ChatHistory = agent_client.get_history(thread_id=tid).messages
+            hist: ChatHistory = agent_client.get_history(
+                thread_id=tid).messages
         except AgentClientError:
             hist = []
         st.session_state.thread_id, st.session_state.messages = tid, hist
@@ -177,8 +176,7 @@ async def main() -> None:
         st.header(f"{APP_ICON}  {APP_TITLE}")
 
         st.markdown(
-            "**GitHub** - [Repo Link](https://github.com/yashchinchole/AgentHub)"
-        )
+            "**GitHub** - [Repo Link](https://github.com/yashchinchole/AgentHub)")
 
         st.caption(
             "AgentHub is a full-stack multi-agent system designed for intelligent querying across diverse data sources. "
@@ -199,21 +197,20 @@ async def main() -> None:
         agent_client.agent = keys[labels.index(choice_label)]
 
         if st.button("🗑 New chat", use_container_width=True):
-            st.session_state.thread_id, st.session_state.messages = (
-                str(uuid.uuid4()),
-                [],
-            )
+            st.session_state.thread_id, st.session_state.messages = str(uuid.uuid4()), [
+            ]
             st.rerun()
 
         with st.popover("⚙ Settings", use_container_width=True):
-            model_idx = agent_client.info.models.index(agent_client.info.default_model)
-            model = st.selectbox("LLM model", agent_client.info.models, index=model_idx)
+            model_idx = agent_client.info.models.index(
+                agent_client.info.default_model)
+            model = st.selectbox(
+                "LLM model", agent_client.info.models, index=model_idx)
             use_stream = st.toggle("Stream tokens", True)
             st.text_input("User ID", user_id, disabled=True)
 
         st.markdown(
-            "[Architecture diagram](https://github.com/yashchinchole/AgentHub/blob/master/media/agent_architecture.png?raw=true)"
-        )
+            "[Architecture diagram](https://github.com/yashchinchole/AgentHub/blob/master/media/agent_architecture.png?raw=true)")
         st.caption("Developed by Yash Chinchole")
 
     # ---------- Welcome on empty chat ----------
@@ -232,7 +229,6 @@ async def main() -> None:
     async def _history() -> AsyncGenerator[ChatMessage, None]:
         for m in messages:
             yield m
-
     await draw_messages(_history())
 
     # ---------- Sample questions (after chat history) ----------
@@ -240,8 +236,7 @@ async def main() -> None:
         sample_qs = SAMPLE_QUESTIONS.get(agent_client.agent, [])
         if sample_qs:
             st.write(
-                f"Try these sample questions for the {AGENT_OPTIONS[agent_client.agent]}:"
-            )
+                f"Try these sample questions for the {AGENT_OPTIONS[agent_client.agent]}:")
             for i, q in enumerate(sample_qs):
                 if st.button(q, key=f"sample_{agent_client.agent}_{i}"):
                     st.session_state["prefill_question"] = q
@@ -253,7 +248,8 @@ async def main() -> None:
 
     try:
         if prefill_text:
-            user_input = st.chat_input("Type your message…", value=prefill_text)
+            user_input = st.chat_input(
+                "Type your message…", value=prefill_text)
         else:
             user_input = st.chat_input("Type your message…")
     except TypeError:
@@ -270,7 +266,7 @@ async def main() -> None:
                     message=user_input,
                     model=model,
                     thread_id=st.session_state.thread_id,
-                    user_id=user_id,
+                    user_id=user_id
                 )
                 await draw_messages(stream, is_new=True)
             else:
@@ -278,7 +274,7 @@ async def main() -> None:
                     message=user_input,
                     model=model,
                     thread_id=st.session_state.thread_id,
-                    user_id=user_id,
+                    user_id=user_id
                 )
                 messages.append(resp)
                 st.chat_message("ai").write(resp.content)
@@ -372,21 +368,17 @@ async def draw_messages(
 
                         for tool_call in msg.tool_calls:
                             if "transfer_to" in tool_call["name"]:
-                                await handle_agent_msgs(
-                                    messages_agen, call_results, is_new
-                                )
+                                await handle_agent_msgs(messages_agen, call_results, is_new)
                                 break
                             tool_result: ChatMessage = await anext(messages_agen)
 
                             if isinstance(tool_result, str):
                                 tool_result = ChatMessage(
-                                    type="tool", content=tool_result
-                                )
+                                    type="tool", content=tool_result)
 
                             if getattr(tool_result, "type", None) != "tool":
                                 st.error(
-                                    f"Unexpected ChatMessage type: {getattr(tool_result, 'type', tool_result)}"
-                                )
+                                    f"Unexpected ChatMessage type: {getattr(tool_result, 'type', tool_result)}")
                                 st.write(tool_result)
                                 st.stop()
 
@@ -426,10 +418,7 @@ async def handle_feedback() -> None:
     latest_run_id = st.session_state.messages[-1].run_id
     feedback = st.feedback("stars", key=latest_run_id)
 
-    if (
-        feedback is not None
-        and (latest_run_id, feedback) != st.session_state.last_feedback
-    ):
+    if feedback is not None and (latest_run_id, feedback) != st.session_state.last_feedback:
         normalized_score = (feedback + 1) / 5.0
 
         agent_client: AgentClient = st.session_state.agent_client
@@ -461,7 +450,8 @@ async def handle_agent_msgs(messages_agen, call_results, is_new):
     if status and first_msg.content:
         status.write(first_msg.content)
     while True:
-        finish_reason = getattr(first_msg, "response_metadata", {}).get("finish_reason")
+        finish_reason = getattr(
+            first_msg, "response_metadata", {}).get("finish_reason")
         if finish_reason is not None and finish_reason != "tool_calls":
             if status:
                 status.update(state="complete")
@@ -487,7 +477,6 @@ async def handle_agent_msgs(messages_agen, call_results, is_new):
                     popover.write(tc["args"])
                     nested_popovers[tc["id"]] = popover
         first_msg = sub_msg
-
 
 if __name__ == "__main__":
     asyncio.run(main())
