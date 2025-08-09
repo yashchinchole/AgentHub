@@ -165,7 +165,6 @@ async def main() -> None:
     if "thread_id" not in st.session_state:
         tid = st.query_params.get("thread_id") or str(uuid.uuid4())
         try:
-            
             hist: ChatHistory = agent_client.get_history(
                 thread_id=tid).messages
         except AgentClientError:
