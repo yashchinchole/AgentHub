@@ -175,6 +175,10 @@ async def main() -> None:
     # ---------- Sidebar ----------
     with st.sidebar:
         st.header(f"{APP_ICON}  {APP_TITLE}")
+
+        st.markdown(
+            "**GitHub** - [Repo Link](https://github.com/yashchinchole/AgentHub)")
+
         st.caption(
             "AgentHub is a full-stack multi-agent system designed for intelligent querying across diverse data sources. "
             "It supports unstructured data (e.g., PDFs, documents) via a RAG-based agent, structured data (e.g., SQL databases) through a SQL agent, and research assistance using web search, Wikipedia, Arxiv, and a calculator agent for mathematical reasoning."
