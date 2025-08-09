@@ -156,7 +156,7 @@ async def main() -> None:
     if "agent_client" not in st.session_state:
         load_dotenv()
         base = os.getenv(
-        "AGENT_URL") or f"http://{os.getenv('HOST', '0.0.0.0')}:{os.getenv('PORT', 8000)}"
+            "AGENT_URL") or f"http://{os.getenv('HOST', '0.0.0.0')}:{os.getenv('PORT', 8000)}"
         with st.spinner("Connecting…"):
             st.session_state.agent_client = AgentClient(base_url=base)
     agent_client: AgentClient = st.session_state.agent_client
