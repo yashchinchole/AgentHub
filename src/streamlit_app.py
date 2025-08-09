@@ -70,6 +70,7 @@ async def main() -> None:
 
     html, body, [class*="css"]  {
         font-family: 'JetBrains Mono', monospace !important;
+        background: #1e1e1e !important;
     }
 
     section.main > div {
@@ -102,6 +103,11 @@ async def main() -> None:
     [data-testid="stStatusWidget"] {
         visibility: hidden;
         height: 0;
+    }
+
+    [data-testid="stRadio"] label, 
+    [data-testid="stRadio"] div[role="radiogroup"] label {
+        color: snow !important;
     }
 
     textarea[data-testid="stChatInputTextarea"] {
@@ -202,13 +208,13 @@ async def main() -> None:
 
         st.markdown(
             "[Architecture diagram](https://github.com/yashchinchole/AgentHub/blob/master/media/agent_architecture.png?raw=true)")
-        st.caption("Made with ❤️ by Yash Chinchole")
+        st.caption("Developed by Yash Chinchole")
 
     # ---------- Welcome on empty chat ----------
     if not messages:
         welcome = {
             "chatbot": "Hello! I'm a simple chatbot. Ask me anything!",
-            "rag-assistant": "Hi! I'm Yash Chinchole's assistant. Ask me about my experience, skills, or the 'Attention Is All You Need' paper!",
+            "rag-assistant": "Hi! I'm Yash Chinchole's assistant. Ask me about my experience and skills. You can also ask questions based on the sample document, the 'Attention Is All You Need' paper!",
             "sql": "Hello! I query the Chinook DB. Ask music/business questions!",
             "research-assistant": "Hi! I'm your web research assistant. Need facts, refs, or maths?",
             "wiki": "Hi! Ask me for concise answers from Wikipedia.",
