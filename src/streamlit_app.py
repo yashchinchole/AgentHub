@@ -166,8 +166,7 @@ async def main() -> None:
     if "thread_id" not in st.session_state:
         tid = st.query_params.get("thread_id") or str(uuid.uuid4())
         try:
-            hist: ChatHistory = agent_client.get_history(
-                thread_id=tid).messages
+            hist: ChatHistory = agent_client.get_history(thread_id=tid).messages
         except AgentClientError:
             hist = []
         st.session_state.thread_id, st.session_state.messages = tid, hist
@@ -207,10 +206,8 @@ async def main() -> None:
             st.rerun()
 
         with st.popover("⚙ Settings", use_container_width=True):
-            model_idx = agent_client.info.models.index(
-                agent_client.info.default_model)
-            model = st.selectbox(
-                "LLM model", agent_client.info.models, index=model_idx)
+            model_idx = agent_client.info.models.index(agent_client.info.default_model)
+            model = st.selectbox("LLM model", agent_client.info.models, index=model_idx)
             use_stream = st.toggle("Stream tokens", True)
             st.text_input("User ID", user_id, disabled=True)
 
@@ -256,8 +253,7 @@ async def main() -> None:
 
     try:
         if prefill_text:
-            user_input = st.chat_input(
-                "Type your message…", value=prefill_text)
+            user_input = st.chat_input("Type your message…", value=prefill_text)
         else:
             user_input = st.chat_input("Type your message…")
     except TypeError:
@@ -465,8 +461,7 @@ async def handle_agent_msgs(messages_agen, call_results, is_new):
     if status and first_msg.content:
         status.write(first_msg.content)
     while True:
-        finish_reason = getattr(
-            first_msg, "response_metadata", {}).get("finish_reason")
+        finish_reason = getattr(first_msg, "response_metadata", {}).get("finish_reason")
         if finish_reason is not None and finish_reason != "tool_calls":
             if status:
                 status.update(state="complete")
