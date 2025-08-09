@@ -65,9 +65,6 @@ pip-delete-this-directory.txt
 cython_debug/
 
 # Rough/Temp Files
-*.txt
 TODO
-*.excalidraw
-*.mp4
-AgentHub+.gif
+rough
 mcp
