@@ -84,3 +84,79 @@ _Orchestrates user interactions through Streamlit and FastAPI into LangGraph, wh
 - **UV:** Python environment and dependency manager for consistent builds
 - **Docker & Docker Compose:** Containerization and deployment configurations
 - **LangSmith:** Observability and feedback platform integration
+
+---
+
+## Project Structure
+
+```
+└── AgentHub/
+    ├── README.md
+    ├── compose.yaml
+    ├── langgraph.json
+    ├── pyproject.toml
+    ├── requirements.txt
+    ├── uv.lock
+    ├── .dockerignore
+    ├── .env.example
+    ├── chroma_db/
+    │   ├── chroma.sqlite3
+    │   └── 3237c492-b9c0-4308-b712-535f378bd58b/
+    │       ├── data_level0.bin
+    │       ├── header.bin
+    │       ├── length.bin
+    │       └── link_lists.bin
+    ├── data/
+    │   └── Chinook.db
+    ├── docker/
+    │   ├── Dockerfile.app
+    │   └── Dockerfile.service
+    ├── scripts/
+    │   └── create_chroma_db.py
+    └── src/
+        ├── run_agent.py
+        ├── run_client.py
+        ├── run_service.py
+        ├── streamlit_app.py
+        ├── agents/
+        │   ├── __init__.py
+        │   ├── agents.py
+        │   ├── arxiv_agent.py
+        │   ├── chatbot.py
+        │   ├── llama_guard.py
+        │   ├── rag_assistant.py
+        │   ├── research_assistant.py
+        │   ├── sql_agent.py
+        │   ├── tools.py
+        │   └── wikipedia_agent.py
+        ├── client/
+        │   ├── __init__.py
+        │   └── client.py
+        ├── core/
+        │   ├── __init__.py
+        │   ├── llm.py
+        │   └── settings.py
+        ├── memory/
+        │   ├── __init__.py
+        │   └── sqlite.py
+        ├── schema/
+        │   ├── __init__.py
+        │   ├── models.py
+        │   ├── schema.py
+        │   └── task_data.py
+        └── service/
+            ├── __init__.py
+            ├── service.py
+            └── utils.py
+```
+
+The project follows a modular architecture with clear separation of concerns:
+
+- **`agents/`**: Contains all specialized AI agents and their implementations
+- **`core/`**: Core LLM integration and configuration settings
+- **`service/`**: FastAPI backend service and utilities
+- **`client/`**: Client-side communication layer
+- **`schema/`**: Data models and task definitions
+- **`memory/`**: Persistent storage and memory management
+- **`docker/`**: Containerization configurations
+- **`scripts/`**: Utility scripts for setup and maintenance
