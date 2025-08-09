@@ -73,13 +73,13 @@ async def main() -> None:
     }
 
     section.main > div {
-        background: #282822;
+        background: #1e1e1e;
         padding: 1rem;
         border-radius: 12px;
     }
 
     [data-testid="stSidebar"] {
-        background: #252522;
+        background: #1e1e1e;
         color: #00bff9;
     }
 
@@ -151,7 +151,7 @@ async def main() -> None:
         load_dotenv()
         base = os.getenv(
             "AGENT_URL") or f"http://{os.getenv('HOST', '0.0.0.0')}:{os.getenv('PORT', 10000)}"
-            # "AGENT_URL") or f"http://{os.getenv('HOST', '0.0.0.0')}:{os.getenv('PORT', 8080)}"
+        # "AGENT_URL") or f"http://{os.getenv('HOST', '0.0.0.0')}:{os.getenv('PORT', 8080)}"
         with st.spinner("Connecting…"):
             st.session_state.agent_client = AgentClient(base_url=base)
     agent_client: AgentClient = st.session_state.agent_client
