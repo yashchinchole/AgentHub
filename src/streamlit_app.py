@@ -196,12 +196,12 @@ async def main() -> None:
         choice_label = st.radio("Choose agent", labels, idx_default)
         agent_client.agent = keys[labels.index(choice_label)]
 
-        if st.button("🗑 New chat", use_container_width=True):
+        if st.button("New chat", use_container_width=True):
             st.session_state.thread_id, st.session_state.messages = str(uuid.uuid4()), [
             ]
             st.rerun()
 
-        with st.popover("⚙ Settings", use_container_width=True):
+        with st.popover("Settings", use_container_width=True):
             model_idx = agent_client.info.models.index(
                 agent_client.info.default_model)
             model = st.selectbox(
