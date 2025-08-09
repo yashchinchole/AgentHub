@@ -2,11 +2,11 @@
 .streamlit/secrets.toml
 
 # SQLite & ChromaDB
-*.db
-*.sqlite3
-*.bin
+# *.db
+# *.sqlite3
+# *.bin
 checkpoints.db*
-data/
+data/*.pdf
 
 # LangGraph
 .langgraph_api/

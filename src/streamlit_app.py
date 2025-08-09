@@ -20,7 +20,8 @@ SAMPLE_QUESTIONS = {
     ],
     "rag-assistant": [
         "List some achievements of Yash Chinchole.",
-        "Provide a summary of Yash Chinchole's work experience."
+        "What is the main contribution of the Attention Is All You Need paper?",
+        "What is the difference between self-attention and encoder-decoder attention?",
     ],
     "sql": [
         "What are the table names in the Chinook database?",
@@ -206,7 +207,7 @@ async def main() -> None:
     if not messages:
         welcome = {
             "chatbot": "Hello! I'm a simple chatbot. Ask me anything!",
-            "rag-assistant": "Hi! I'm Yash Chinchole's resume assistant. Ask about my experience or skills!",
+            "rag-assistant": "Hi! I'm Yash Chinchole's assistant. Ask me about my experience, skills, or the 'Attention Is All You Need' paper!",
             "sql": "Hello! I query the Chinook DB. Ask music/business questions!",
             "research-assistant": "Hi! I'm your web research assistant. Need facts, refs, or maths?",
             "wiki": "Hi! Ask me for concise answers from Wikipedia.",
