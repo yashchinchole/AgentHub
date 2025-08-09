@@ -12,7 +12,7 @@ COPY pyproject.toml uv.lock ./
 
 # Install uv and dependencies
 RUN pip install --no-cache-dir uv
-RUN uv sync --frozen --no-dev
+RUN uv pip install -e .
 
 # Copy source code
 COPY src/ ./src/
