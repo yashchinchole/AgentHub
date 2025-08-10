@@ -28,7 +28,6 @@ SAMPLE_QUESTIONS = {
         "Show me the top 5 customers by total purchase.",
         "List all customers who have placed an order in the past 30 days.",
         "Identify the artist(s) who have released the most albums, along with their names.",
-        "Determine the most popular genre(s) in terms of the number of albums and tracks available, and the total sales amount.",
     ],
     "research-assistant": [
         "Provide links to tutorials or documentation for learning Python.",
