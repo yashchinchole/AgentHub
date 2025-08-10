@@ -2,25 +2,18 @@ FROM python:3.12.3-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
+ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
+ENV UV_COMPILE_BYTECODE=1
 
-# Copy dependency files
-COPY pyproject.toml uv.lock ./
-
-# Install uv and dependencies
+COPY pyproject.toml .
+COPY uv.lock .
 RUN pip install --no-cache-dir uv
-RUN uv pip install --group client
+RUN uv sync --frozen --only-group client
 
-# Copy source code
-COPY src/ ./src/
+COPY src/client/ ./client/
+COPY src/schema/ ./schema/
+COPY src/streamlit_app.py .
 
-# Expose port
 EXPOSE 8501
 
-# Set environment variables
-ENV PYTHONPATH=/app/src
-
-CMD ["streamlit", "run", "src/streamlit_app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+CMD ["streamlit", "run", "streamlit_app.py", "--server.address=0.0.0.0", "--server.port=8501"]

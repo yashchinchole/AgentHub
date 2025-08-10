@@ -2,29 +2,26 @@ FROM python:3.12.3-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
+ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
+ENV UV_COMPILE_BYTECODE=1
 
-# Copy dependency files
-COPY pyproject.toml uv.lock ./
-
-# Install uv and dependencies
+COPY pyproject.toml .
+COPY uv.lock .
 RUN pip install --no-cache-dir uv
-RUN uv pip install -e .
+RUN uv sync --frozen --no-install-project --no-dev
 
-# Copy source code
-COPY src/ ./src/
+COPY src/agents/ ./agents/
+COPY src/core/ ./core/
+COPY src/memory/ ./memory/
+COPY src/schema/ ./schema/
+COPY src/service/ ./service/
+COPY src/run_service.py .
 
-# Create data directory
 RUN mkdir -p /app/data
 
-# Expose port
-EXPOSE 8000
-
-# Set environment variables
-ENV PYTHONPATH=/app/src
+ENV PYTHONPATH=/app
 ENV PORT=8000
 
-CMD ["python", "src/run_service.py"]
+EXPOSE 8000
+
+CMD ["python", "run_service.py"]
