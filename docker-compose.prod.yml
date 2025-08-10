@@ -9,9 +9,16 @@ services:
       - .env
     volumes:
       - ./data:/app/data
+      - ./chroma_db:/app/chroma_db
     restart: unless-stopped
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   streamlit_app:
     build:
@@ -20,14 +27,21 @@ services:
     ports:
       - "8501:8501"
     depends_on:
-      - agent_service
+      agent_service:
+        condition: service_healthy
     env_file:
       - .env
     environment:
-      - AGENT_URL=http://localhost:8000
+      - AGENT_URL=http://agent_service:8000
     restart: unless-stopped
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
   app-network:
@@ -35,3 +49,4 @@ networks:
 
 volumes:
   data:
+  chroma_db:
