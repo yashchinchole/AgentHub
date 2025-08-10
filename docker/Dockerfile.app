@@ -2,6 +2,11 @@ FROM python:3.12.3-slim
 
 WORKDIR /app
 
+# Install system dependencies including curl for health checks
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
 ENV UV_COMPILE_BYTECODE=1
 

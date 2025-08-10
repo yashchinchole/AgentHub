@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from langchain.chat_models import init_chat_model
 from langchain_community.utilities.sql_database import SQLDatabase
@@ -5,7 +6,7 @@ from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
 from langgraph.prebuilt import create_react_agent
 from langchain import hub
 
-CHINOOK_PATH = Path(__file__).parents[2] / "data" / "Chinook.db"
+CHINOOK_PATH = os.environ.get("CHINOOK_DB_PATH", "/app/data/Chinook.db")
 DB_URI = f"sqlite:///{CHINOOK_PATH}"
 
 

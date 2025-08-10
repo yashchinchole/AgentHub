@@ -7,9 +7,12 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    environment:
+      - CHINOOK_DB_PATH=/app/data/Chinook.db
+      - SQLITE_DB_PATH=/app/checkpoints.db
     volumes:
-      - ./data:/app/data
-      - ./chroma_db:/app/chroma_db
+      - data_volume:/app/data
+      - chroma_volume:/app/chroma_db
     restart: unless-stopped
     networks:
       - app-network
@@ -48,5 +51,5 @@ networks:
     driver: bridge
 
 volumes:
-  data:
-  chroma_db:
+  data_volume:
+  chroma_volume:
