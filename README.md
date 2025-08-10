@@ -10,6 +10,9 @@
 
 ### Live Demo
 
+- **AWS EC2:** http://3.88.134.213:8501
+- **Render:** https://agenthub-yashchinchole.onrender.com
+
 ![Conversation Demo](media/AgentHub.gif)
 
 ---
@@ -92,22 +95,13 @@ _Orchestrates user interactions through Streamlit and FastAPI into LangGraph, wh
 ```
 └── AgentHub/
     ├── README.md
-    ├── compose.yaml
+    ├── docker-compose.prod.yml
     ├── langgraph.json
     ├── pyproject.toml
     ├── requirements.txt
     ├── uv.lock
     ├── .dockerignore
     ├── .env.example
-    ├── chroma_db/
-    │   ├── chroma.sqlite3
-    │   └── 3237c492-b9c0-4308-b712-535f378bd58b/
-    │       ├── data_level0.bin
-    │       ├── header.bin
-    │       ├── length.bin
-    │       └── link_lists.bin
-    ├── data/
-    │   └── Chinook.db
     ├── docker/
     │   ├── Dockerfile.app
     │   └── Dockerfile.service
