@@ -6,7 +6,6 @@
 # *.sqlite3
 # *.bin
 checkpoints.db*
-data/*.pdf
 
 # LangGraph
 .langgraph_api/
