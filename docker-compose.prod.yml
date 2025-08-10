@@ -11,8 +11,8 @@ services:
       - CHINOOK_DB_PATH=/app/data/Chinook.db
       - SQLITE_DB_PATH=/app/checkpoints.db
     volumes:
-      - data_volume:/app/data
-      - chroma_volume:/app/chroma_db
+      - ./data:/app/data
+      - ./chroma_db:/app/chroma_db
     restart: unless-stopped
     networks:
       - app-network
@@ -49,7 +49,3 @@ services:
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  data_volume:
-  chroma_volume:
