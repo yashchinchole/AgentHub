@@ -66,9 +66,15 @@ _Orchestrates user interactions through Streamlit and FastAPI into LangGraph, wh
 
 ---
 
-## Agent Diagram
+## System Architecture
 
-![Agent Diagram](media/agent_diagram.png)
+![System Architecture](media/agenthub_diagram.png)
+
+---
+
+## LangGraph Agent Flow
+
+![LangGraph Agent Flow](media/agent_diagram.png)
 
 ---
 
