@@ -27,11 +27,9 @@ def convert_message_content_to_string(content: str | list[str | dict]) -> str:
             if isinstance(content_item, dict) and content_item.get("type") == "text":
                 text.append(content_item.get("text", ""))
             elif content_item is not None:
-                # Fallback for other content types
                 text.append(str(content_item))
         return "".join(text)
     except Exception as e:
-        # Log the error and return a fallback
         import logging
         logger = logging.getLogger(__name__)
         logger.warning(
@@ -76,20 +74,17 @@ def langchain_to_chat_message(message: BaseMessage) -> ChatMessage:
                     )
                     return custom_message
                 else:
-                    # Fallback for other LangchainChatMessage types
                     return ChatMessage(
                         type="ai",
                         content=convert_message_content_to_string(
                             message.content),
                     )
             case _:
-                # Fallback for unknown message types
                 return ChatMessage(
                     type="ai",
                     content=convert_message_content_to_string(message.content),
                 )
     except Exception as e:
-        # Log the error and return a fallback message
         import logging
         logger = logging.getLogger(__name__)
         logger.warning(
@@ -115,7 +110,6 @@ def remove_tool_calls(content: str | list[str | dict]) -> str | list[str | dict]
             if isinstance(content_item, str) or (isinstance(content_item, dict) and content_item.get("type") != "tool_use")
         ]
     except Exception as e:
-        # Log the error and return a fallback
         import logging
         logger = logging.getLogger(__name__)
         logger.warning(

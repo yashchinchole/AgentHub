@@ -257,7 +257,6 @@ async def message_generator(
                 except Exception as e:
                     logger.error(
                         f"Error parsing message: {e}, Message type: {type(message)}, Message: {message}")
-                    # Skip this message instead of yielding an error
                     continue
                 if chat_message.type == "human" and chat_message.content == user_input.message:
                     continue
@@ -279,7 +278,6 @@ async def message_generator(
             f"Message generation completed successfully for run_id: {run_id}")
     except Exception as e:
         logger.error(f"Error in message generator: {e}", exc_info=True)
-        # Only yield error for critical failures, not for message parsing issues
         if "message parsing" not in str(e).lower():
             yield f"data: {json.dumps({'type': 'error', 'content': 'Internal server error'})}\n\n"
     finally:
@@ -293,7 +291,6 @@ def _create_ai_message(parts: dict) -> AIMessage:
         valid_keys = set(sig.parameters)
         filtered = {k: v for k, v in parts.items() if k in valid_keys}
 
-        # Ensure content is always present
         if 'content' not in filtered:
             filtered['content'] = str(
                 parts.get('content', '')) if 'content' in parts else "Message content"
@@ -302,7 +299,6 @@ def _create_ai_message(parts: dict) -> AIMessage:
     except Exception as e:
         logger.warning(
             f"Failed to create AI message from parts {parts}: {e}, using fallback")
-        # Return a basic AI message as fallback
         return AIMessage(content=str(parts.get('content', 'Message creation error')))
 
 
