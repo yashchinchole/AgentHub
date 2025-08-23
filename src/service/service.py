@@ -191,15 +191,23 @@ async def message_generator(
     kwargs, run_id = await _handle_input(user_input, agent)
 
     try:
+        logger.info(
+            f"Starting message generation for agent {agent_id}, run_id: {run_id}")
         async for stream_event in agent.astream(
             **kwargs, stream_mode=["updates", "messages", "custom"], subgraphs=True
         ):
             if not isinstance(stream_event, tuple):
+                logger.debug(
+                    f"Skipping non-tuple stream event: {type(stream_event)}")
                 continue
             if len(stream_event) == 3:
                 _, stream_mode, event = stream_event
             else:
                 stream_mode, event = stream_event
+
+            logger.debug(
+                f"Processing stream mode: {stream_mode}, event type: {type(event)}")
+
             new_messages = []
             if stream_mode == "updates":
                 for node, updates in event.items():
@@ -224,6 +232,8 @@ async def message_generator(
             if stream_mode == "custom":
                 new_messages = [event]
 
+            logger.debug(f"Processing {len(new_messages)} new messages")
+
             processed_messages = []
             current_message: dict[str, Any] = {}
             for message in new_messages:
@@ -245,8 +255,9 @@ async def message_generator(
                     chat_message = langchain_to_chat_message(message)
                     chat_message.run_id = str(run_id)
                 except Exception as e:
-                    logger.error(f"Error parsing message: {e}")
-                    yield f"data: {json.dumps({'type': 'error', 'content': 'Unexpected error'})}\n\n"
+                    logger.error(
+                        f"Error parsing message: {e}, Message type: {type(message)}, Message: {message}")
+                    # Skip this message instead of yielding an error
                     continue
                 if chat_message.type == "human" and chat_message.content == user_input.message:
                     continue
@@ -263,18 +274,36 @@ async def message_generator(
                 content = remove_tool_calls(msg.content)
                 if content:
                     yield f"data: {json.dumps({'type': 'token', 'content': convert_message_content_to_string(content)})}\n\n"
+
+        logger.info(
+            f"Message generation completed successfully for run_id: {run_id}")
     except Exception as e:
-        logger.error(f"Error in message generator: {e}")
-        yield f"data: {json.dumps({'type': 'error', 'content': 'Internal server error'})}\n\n"
+        logger.error(f"Error in message generator: {e}", exc_info=True)
+        # Only yield error for critical failures, not for message parsing issues
+        if "message parsing" not in str(e).lower():
+            yield f"data: {json.dumps({'type': 'error', 'content': 'Internal server error'})}\n\n"
     finally:
         yield "data: [DONE]\n\n"
 
 
 def _create_ai_message(parts: dict) -> AIMessage:
-    sig = inspect.signature(AIMessage)
-    valid_keys = set(sig.parameters)
-    filtered = {k: v for k, v in parts.items() if k in valid_keys}
-    return AIMessage(**filtered)
+    """Create an AIMessage from parts, handling edge cases gracefully."""
+    try:
+        sig = inspect.signature(AIMessage)
+        valid_keys = set(sig.parameters)
+        filtered = {k: v for k, v in parts.items() if k in valid_keys}
+
+        # Ensure content is always present
+        if 'content' not in filtered:
+            filtered['content'] = str(
+                parts.get('content', '')) if 'content' in parts else "Message content"
+
+        return AIMessage(**filtered)
+    except Exception as e:
+        logger.warning(
+            f"Failed to create AI message from parts {parts}: {e}, using fallback")
+        # Return a basic AI message as fallback
+        return AIMessage(content=str(parts.get('content', 'Message creation error')))
 
 
 def _sse_response_example() -> dict[int | str, Any]:
